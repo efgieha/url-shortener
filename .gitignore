@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+.envs/*
+!.envs/.example.env
+!.envs/.example.postgres.env
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+staticfiles/
+db.sqlite3

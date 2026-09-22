@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:18-alpine
+    env_file: .envs/.postgres.env
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.local
+    env_file: .envs/.local.env
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      - /app/.venv
+
+volumes:
+  pgdata:

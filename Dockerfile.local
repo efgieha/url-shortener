@@ -1,0 +1,23 @@
+FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim AS builder
+
+WORKDIR /app
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen
+COPY . .
+
+
+FROM python:3.13-slim-bookworm
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH="/app/.venv/bin:$PATH"
+
+RUN useradd --create-home --uid 1000 app
+
+WORKDIR /app
+COPY --from=builder --chown=app:app /app /app
+
+USER app
+EXPOSE 9000
+
+CMD ["./scripts/start-local.sh"]
